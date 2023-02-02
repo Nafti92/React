@@ -49,16 +49,17 @@ class Clock extends React.Component {
 class Incrementer extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {count: props.start}
-    this.timer = null
+    this.state = {count: props.start, timer: null}
+    this.toggle = this.toggle.bind(this)
+    this.reset = this.reset.bind(this)
   }
 
   componentDidMount() {
-    this.timer = window.setInterval(this.increment.bind(this), 1000)
+    this.play()
   }
 
   componentWillUnmount() {
-    clearInterval(this.timer)
+    clearInterval(this.state.timer)
   }
 
   increment() {
@@ -67,25 +68,53 @@ class Incrementer extends React.Component {
     })
   }
 
+  pause() {
+    clearInterval(this.state.timer)
+    this.setState ({timer: null})
+
+  }
+
+  play() {
+    clearInterval(this.state.timer)
+    this.setState ({
+      timer: setInterval(this.increment.bind(this), 1000)
+    })
+  }
+
+  toggle() {
+    return this.state.timer ? this.pause() : this.play()
+  }
+
+  label() {
+    return this.state.timer ? 'Pause' : 'Lecture'
+  }
+
+  reset() {
+    this.setState((state,props) => ({count: props.start}))
+  }
+
   render() {
     return <div>
       <p>Count: {this.state.count}</p>
+      <button onClick={this.toggle}>{this.label()}</button>
+      <button onClick={this.reset}>Réinitialiser</button>
     </div>
   }
 }
+
+
 
 Incrementer.defaultProps = {
   start: 0,
   step: 1
 }
 
+
 function Home() {
   return <div>
     <Welcome name="Nafti"/>
     <Welcome name="Jean"/>
-    <Clock/>
-    <Incrementer start={10}/>
-    <Incrementer start={100} step={10}/>
+    <Incrementer />
   </div>
 }
 
