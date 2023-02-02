@@ -1,30 +1,93 @@
-let n= 0
-
-function numberFormat(n) {
-  return n.toString().padsStart(2, '0')
-
+function WelcomeFunc({name, children}) {
+  return <div>
+    <h1>Hello, {name}</h1>
+    <p>
+      {children}
+    </p>
+  </div>
 }
 
-function render() {
-  const items = ['apple', 'orange', 'banana']
-  const lis = items.map((item, k) => <li key={k}>{item}</li>)
-  const title = <React.Fragment><h1 className="title" id="title">
-    Hello, world <span>{n}</span>
+class Welcome extends React.Component {
 
-  </h1>
-  <ul> {lis}
-  </ul>
-
-  </React.Fragment>
-
-
-  ReactDOM.render(title, document.querySelector('#app'))
-
+  render() {
+    return <div>
+      <h1>Hello, {this.props.name}</h1>
+      <p>
+        {this.props.children}
+      </p>
+    </div>
+  }
 }
 
-render()
+class Clock extends React.Component {
 
-window.setInterval(() => {
-  n++
-  render()
-}, 1000)
+  constructor(props) {
+    super(props)
+    this.state = {date: new Date()}
+    this.timer = null
+  }
+
+  componentDidMount() {
+    this.timer = window.setInterval(this.tick.bind(this), 1000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer)
+  }
+
+  tick() {
+    this.setState({date: new Date()})
+  }
+
+  render () {
+    const date = new Date()
+    return <div> Il est {this.state.date.toLocaleTimeString()} {this.state.date.toLocaleDateString()}
+    </div>
+  }
+}
+
+class Incrementer extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {count: props.start}
+    this.timer = null
+  }
+
+  componentDidMount() {
+    this.timer = window.setInterval(this.increment.bind(this), 1000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer)
+  }
+
+  increment() {
+    this.setState(function (state, props) {
+      return {count: state.count + props.step}
+    })
+  }
+
+  render() {
+    return <div>
+      <p>Count: {this.state.count}</p>
+    </div>
+  }
+}
+
+Incrementer.defaultProps = {
+  start: 0,
+  step: 1
+}
+
+function Home() {
+  return <div>
+    <Welcome name="Nafti"/>
+    <Welcome name="Jean"/>
+    <Clock/>
+    <Incrementer start={10}/>
+    <Incrementer start={100} step={10}/>
+  </div>
+}
+
+
+ReactDOM.render(<Home/>, document.querySelector('#app'))
