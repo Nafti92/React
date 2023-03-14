@@ -53,8 +53,8 @@ class Home extends React.Component {
   render () {
     return (
       <form className="container" onSubmit={this.handleSubmit}>
-        <Field name="nom" value={this.state.nom} onChange={this.handleChange}>name</Field>
-        <Field name="prenom" value={this.state.prenom} onChange={this.handleChange}>firstname</Field>
+        <Field name="nom" value={this.state.nom} onChange={this.handleChange}>nom</Field>
+        <Field name="prenom" value={this.state.prenom} onChange={this.handleChange}>prénom</Field>
         <Checkbox name="newsletter" value={this.state.newsletter} onChange={this.handleChange}>S'abonner à la newsletter</Checkbox>
         <div className="form-group">
           <button className="btn btn-primary">Envoyer</button>
